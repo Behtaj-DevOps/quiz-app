@@ -1,12 +1,18 @@
-FROM node:14
+FROM node:14 as build
 
-WORKDIR /app
+WORKDIR /src
 
-COPY package*.json ./
+COPY package*.json .
 
 RUN npm install
 
 COPY . .
+
+FROM node:14-slim
+
+WORKDIR /src 
+
+COPY --from=build /src .
 
 EXPOSE 3000
 
